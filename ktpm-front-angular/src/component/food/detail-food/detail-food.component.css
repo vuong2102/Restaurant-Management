@@ -1,0 +1,15 @@
+table {
+  width: 100%;
+}
+
+th, td {
+  text-align: center;
+}
+
+td img {
+  width: 100px;
+}
+
+.btn-primary {
+  margin-right: 10px;
+}

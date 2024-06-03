@@ -1,0 +1,112 @@
+<div>
+  <div class="detail-main">
+    <h4 class="d-flex justify-content-center text-center detail-main-title">
+      Chi tiết combo
+    </h4>
+    <hr />
+    <div class="detail-combo">
+      <img
+        class="img-combo"
+        src="../../../assets/image/combo/{{ combo.image }}"
+      />
+      <div>
+        <h4 class="name-combo">{{ combo.name }}</h4>
+        <p class="price-combo">Price: {{ combo.price | currency : "USD" }}</p>
+        <p>Exist: {{ combo.available }}</p>
+        <p class="des-combo">{{ combo.description }}</p>
+      </div>
+    </div>
+    <div class="detail-food">
+      <div
+        class="d-flex justify-content-between align-items-center detail-food-title"
+      >
+        <h5>Các món ăn trong combo</h5>
+        <button class="btn btn-primary" (click)="showAddFoodDiv()">
+          Thêm món ăn
+        </button>
+      </div>
+
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên</th>
+            <th>Mô tả</th>
+            <th>Hình ảnh</th>
+            <th>Giá</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let food of listFood; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ food.name }}</td>
+            <td>{{ food.description }}</td>
+            <td>
+              <img
+                class="img-food-mana"
+                src="../../../assets/image/{{ food.image }}"
+              />
+            </td>
+            <td>${{ food.price }}</td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="updateFood(food, null)"
+              >
+                Xóa
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="add-food-overlay" *ngIf="isAddFoodVisible">
+  <div class="add-food-content">
+    <div class="d-flex justify-content-between text-center">
+      <h4>Thêm món ăn mới</h4>
+      <span class="button-close" (click)="hideAddFoodDiv()">x</span>
+    </div>
+
+    <!-- Form thêm món ăn -->
+    <div>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let food of listFoodToAdd | paginate: { itemsPerPage: 7, currentPage: page }; let i = index">
+            <td>{{ i + 1 + (page - 1) * 7 }}</td>
+            <td>{{ food.name }}</td>
+            <td>
+              <img
+                class="img-food-mana"
+                src="../../../assets/image/{{ food.image }}"
+              />
+            </td>
+            <td>${{ food.price }}</td>
+            <td>
+              <input class="check-food-Add" type="checkbox" (change)="onCheckboxChange(food, $event)" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="add-food-combo d-flex justify-content-between">
+        <div class="d-flex testt">
+          <pagination-controls class="custom-pagination" (pageChange)="page = $event"></pagination-controls>
+        </div>
+        <button class="btn btn-primary btn-save-add" (click)="saveFoodAdd()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,163 @@
+<div class="order-section">
+  <div class="order-main">
+    <h3 class="text-center">Menu thực đơn</h3>
+    <hr />
+    <div class="order-main-content">
+      <div class="input-group">
+        <div id="search-autocomplete" class="form-outline" data-mdb-input-init>
+          <input
+            type="search"
+            id="form1"
+            class="form-control"
+            placeholder="Search..."
+            [(ngModel)]="searchTerm"
+          />
+        </div>
+        <button type="button" class="btn btn-primary" (click)="onSearch()">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+
+      <h6>Danh sách món ăn</h6>
+      <div class="list-food">
+        <tr class="food-tr" *ngFor="let food of listFood | filter: searchTerm | paginate: { itemsPerPage: 9, currentPage: page }">
+          <div class="food-item col-md-4">
+            <td class="food-image-container">
+              <img
+                class="img-food"
+                src="../../../assets/image/{{ food.image }}"
+              />
+              <div class="add-to-cart">
+                <i
+                  class="bx btn-plus bx-plus bx-tada bx-flip-horizontal"
+                  (click)="addToOrder(food)"
+                ></i>
+              </div>
+            </td>
+            <td>{{ food.name }}</td>
+            <td>${{ food.price }}</td>
+          </div>
+        </tr>
+      </div>
+      <div class="d-flex justify-content-center custom-paginate">
+        <pagination-controls class="custom-pagination" (pageChange)="page = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chọn bàn -->
+  <div class="order-result">
+    <div class="order-table" style="font-size: 14px">
+      <h5 class="order-title">Chọn bàn</h5>
+      <table class="order-table-content">
+        <thead>
+          <tr>
+            <th class="column">Number</th>
+            <th class="column">Area</th>
+            <th class="column">Status</th>
+            <th class="column final-column">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let table of listTable" class="row-table">
+            <th class="column">{{ table.number }}</th>
+            <td class="column">{{ table.area }}</td>
+            <td class="table-status" *ngIf="table.status === 'Available'">
+              {{ table.status }}
+            </td>
+            <td
+              class="table-status-warning"
+              *ngIf="table.status === 'Unavailable'"
+            >
+              {{ table.status }}
+            </td>
+            <td class="column">
+              <input
+                class="check-table"
+                type="checkbox"
+                id=""
+                name="tableSelected"
+                value="tableSelected"
+                *ngIf="table.status === 'Available'"
+                [checked]="isTableSelected(table)"
+                (change)="tableSelected = table"
+              />
+              <span *ngIf="table.status === 'Unavailable'">...</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Chọn bill -->
+    <div class="order-final">
+      <div class="order-final-thead">
+        <h5 class="order-title-bill">Khách hàng Order</h5>
+        <div class="order-table-area">
+          <p
+            class="table-final"
+            style="color: rgb(87, 129, 10); font-weight: bolder"
+          >
+            Table: {{ tableSelected.number }}
+          </p>
+          <p
+            class="table-final"
+            style="color: rgb(87, 129, 10); font-weight: bolder"
+          >
+            Area: {{ tableSelected.area }}
+          </p>
+        </div>
+        <div class="order-title-content">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="col-2">Number</th>
+                <th class="col-5">Name</th>
+                <th class="col-3">Quantity</th>
+                <th class="col-2">Price</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+      <div class="order-final-body">
+        <table class="order-table-content">
+          <tbody>
+            <tr class="tr-content"
+              *ngFor="let food of listFoodOrder; let i = index">
+              <th class="col-2 col-first">{{ i + 1 }}</th>
+              <td class="col-5">{{ food.name }}</td>
+              <td class="col-3">
+                <button class="btn-incre" (click)="increaseQuantity(food)">
+                  +
+                </button>
+                <input class="order-quantity" [(ngModel)]="food.quantity" (ngModelChange)="onQuantityChange()">
+                <button class="btn-decre" (click)="decreaseQuantity(food)">
+                  -
+                </button>
+              </td>
+              <td class="col-2">
+                {{ food.price * food.quantity | currency : "USD" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="order-total">
+        <tr class="row-table-total">
+          <th class="column-order-total">
+            Total price:
+          </th>
+          <th class="column-order-total" style="color: red; font-size: larger">
+            {{ totalPrice | currency : "USD" }}
+          </th>
+        </tr>
+      </div>
+      <div class="btn-print-contain">
+        <button class="btn btn-primary btn-print" (click)="onSubmit()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

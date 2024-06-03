@@ -1,0 +1,71 @@
+<div class="combo">
+  <div class="combo-main">
+    <h5 class="d-flex justify-content-center align-items-center">
+      Manage Combo
+    </h5>
+    <div class="input-group justify-content-end">
+      <div
+        id="search-autocomplete"
+        class="form-outline"
+        data-mdb-input-init
+      >
+        <input
+          type="search"
+          id="form1"
+          class="form-control"
+          placeholder="Search..."
+          [(ngModel)]="searchTerm"
+        />
+      </div>
+      <button
+        type="button"
+        class="btn btn-primary btn-search"
+        data-mdb-ripple-init
+      >
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+    <table class="table text-center">
+      <thead>
+        <tr class="row-table">
+          <th scope="col">STT</th>
+          <th scope="col">Name</th>
+          <th scope="col">Image</th>
+          <th scope="col">Price</th>
+          <th scope="col">Available</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let combo of allCombo | filter : searchTerm; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ combo.name }}</td>
+          <td>
+            <img
+              class="img-combo-mana"
+              src="../../../assets/image/combo/{{ combo.image }}"
+            />
+          </td>
+          <td>{{ combo.price | currency : "USD" }}</td>
+          <td>{{ combo.available }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-primary btn-detail"
+              (click)="detailCombo(combo.id)"
+            >
+              Detail
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="deleteCombo(combo.id)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

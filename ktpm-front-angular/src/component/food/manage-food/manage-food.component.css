@@ -1,0 +1,21 @@
+table {
+  width: 100%;
+}
+
+th, td {
+  text-align: center;
+}
+
+td img {
+  width: 100px;
+}
+
+.btn-primary {
+  margin-right: 10px;
+}
+.img-food-mana{
+  width: 50px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 3px;
+}

@@ -1,0 +1,30 @@
+<div>
+  <table class="table table-striped table-hover" >
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Tên</th>
+        <th>Mô tả</th>
+        <th>Hình ảnh</th>
+        <th>Giá</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let food of listFood; let i = index">
+        <td>{{i + 1}}</td>
+        <td>{{food.name}}</td>
+        <td>{{food.description}}</td>
+        <td><img class="img-food-mana" src="../../../assets/image/{{food.image}}"></td>
+        <td>${{food.price}}</td>
+        <td>
+          <button type="button" class="btn btn-primary" (click)="detailFood(food.id)">Xem chi tiết</button>
+          <button type="button" class="btn btn-danger" (click)="deleteFood(food.id)">Xóa</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-left: auto;">
+    <button type="button" class="btn btn-primary" style="margin-left: auto;" (click)="addFood()">Thêm món ăn</button>
+  </div>
+</div>

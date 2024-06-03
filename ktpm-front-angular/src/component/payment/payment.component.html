@@ -1,0 +1,217 @@
+<div class="payment-section">
+  <div class="payment-main-left">
+    <div class="payment-main">
+      <div class="navbar-title">
+        <h3 class="text-center align-items-center">Payment</h3>
+      </div>
+
+      <hr />
+
+      <!-- Main Chọn bàn -->
+      <div class="order-result">
+        <div class="order-main-content">
+          <!-- Search -->
+          <div class="navbar-first">
+            <div class="payment-cart">
+              <img
+                src="../../assets/image/grocery-store.png"
+                class="img-cart"
+              />
+              <p class="totalBill">{{ listObjectBillTable.length }}</p>
+            </div>
+
+            <div class="input-group">
+              <div
+                id="search-autocomplete"
+                class="form-outline"
+                data-mdb-input-init
+              >
+                <input
+                  type="search"
+                  id="form1"
+                  class="form-control"
+                  placeholder="Search..."
+                  [(ngModel)]="searchTerm"
+                />
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-mdb-ripple-init
+              >
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- End search -->
+
+          <!-- table list -->
+          <div class="order-table" style="font-size: 14px">
+            <h6 class="order-title">Table Ordered</h6>
+            <table class="order-table-content">
+              <thead>
+                <tr>
+                  <th class="column">Number</th>
+                  <th class="column">Area</th>
+                  <th class="column">Time Order</th>
+                  <th class="column">Status</th>
+                  <th class="column final-column">Handle</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let objectBill of listObjectBillTable
+                      | filter : searchTerm
+                      | paginate : { itemsPerPage: 10, currentPage: page }
+                  "
+                  class="row-table"
+                >
+                  <td class="column">{{ objectBill.numberTable }}</td>
+                  <td class="column">{{ objectBill.areaTable }}</td>
+                  <td class="column">{{ objectBill.dateOrder }}</td>
+
+                  <td
+                    class="column table-status"
+                    *ngIf="objectBill.statusPay === 'Paid'"
+                  >
+                    {{ objectBill.statusPay }}
+                  </td>
+                  <td
+                    class="column table-status-warning"
+                    *ngIf="objectBill.statusPay === 'Unpaid'"
+                  >
+                    {{ objectBill.statusPay }}
+                  </td>
+                  <td class="column" *ngIf="objectBill.statusPay === 'Unpaid'">
+                    <div class="d-flex">
+                      <button class="btn btn-primary" (click)="showAddFoodDiv()">Edit</button>
+                      <input
+                        class="check-table"
+                        type="checkbox"
+                        id=""
+                        name="tableSelected"
+                        value="tableSelected"
+                        [checked]="isBillTableSelected(objectBill)"
+                        (change)="billTable = objectBill"
+                        (click)="searchFoodBill(objectBill.billId)"
+                      />
+                    </div>
+                  </td>
+                  <td class="column" *ngIf="objectBill.statusPay === 'Paid'">
+                    ...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- End Table List -->
+        </div>
+        <div class="d-flex justify-content-center custom-paginate">
+          <pagination-controls
+            class="custom-pagination"
+            (pageChange)="page = $event"
+          ></pagination-controls>
+        </div>
+      </div>
+      <div class="order-result"></div>
+    </div>
+  </div>
+
+  <div class="payment-main-right">
+    <div class="title-right">
+      <h5>Bill</h5>
+    </div>
+
+    <hr />
+    <div class="info-client">
+      <p>Số bàn: {{ billTable.numberTable }}</p>
+      <p>Mã hóa đơn: {{ billTable.billId }}</p>
+      <p>Thời gian Order: {{ billTable.dateOrder }}</p>
+    </div>
+    <div class="food-list">
+      <table class="order-table-content">
+        <thead>
+          <tr>
+            <th class="column">Number</th>
+            <th class="column">Name</th>
+            <th class="column">Quantity</th>
+            <th class="column final-column">Price</th>
+          </tr>
+        </thead>
+        <tbody class="order-table-listfood">
+          <tr
+            *ngFor="let foodOrder of listFoodOrder; let i = index"
+            class="row-table"
+          >
+            <td class="col-2">{{ i + 1 }}</td>
+            <th class="col-5">{{ foodOrder.name }}</th>
+            <td class="col-3">{{ foodOrder.quantity }}</td>
+            <td class="col-2">{{ foodOrder.price | currency : "USD" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-print-bill">
+      <tr class="row-table-total">
+        <th class="column-order-total" style="padding-right: 20px">
+          Total price:
+        </th>
+        <th class="column-order-total" style="color: red; font-size: larger">
+          $555
+        </th>
+      </tr>
+      <button class="btn btn-primary btn-print" (click)="printBill()">
+        Print Bill
+      </button>
+    </div>
+  </div>
+  <!-- End PTTT -->
+</div>
+
+<div class="add-food-overlay" *ngIf="isAddFoodVisible">
+  <div class="add-food-content">
+    <div class="d-flex justify-content-between text-center">
+      <h4>Thêm món ăn mới</h4>
+      <span class="button-close" (click)="hideAddFoodDiv()">x</span>
+    </div>
+
+    <!-- Form thêm món ăn -->
+    <div>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let food of listFoodToAdd | paginate: { itemsPerPage: 7, currentPage: page }; let i = index">
+            <td>{{ i + 1 + (page - 1) * 7 }}</td>
+            <td>{{ food.name }}</td>
+            <td>
+              <img
+                class="img-food-mana"
+                src="../../../assets/image/{{ food.image }}"
+              />
+            </td>
+            <td>${{ food.price }}</td>
+            <td>
+              <input class="check-food-Add" type="checkbox" (change)="onCheckboxChange(food, $event)" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="add-food-combo d-flex justify-content-between">
+        <div class="d-flex testt">
+          <pagination-controls class="custom-pagination" (pageChange)="page = $event"></pagination-controls>
+        </div>
+        <button class="btn btn-primary btn-save-add" (click)="saveFoodAdd()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

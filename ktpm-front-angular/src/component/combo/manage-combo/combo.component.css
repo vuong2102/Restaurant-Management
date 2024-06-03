@@ -1,0 +1,29 @@
+.combo{
+  height: 100vh;
+  margin-left: 5px;
+  border-radius: 10px;
+}
+.combo-main{
+  background-color: rgb(255, 255, 255);
+  height: 100vh;
+  border-radius: 7px;
+}
+.row-table {
+  border-top: 1px solid #e3e3e3;
+  justify-content: center;
+}
+.img-combo-mana{
+  width: 70px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+.input-group{
+  margin: 20px 0px;
+}
+.btn-search{
+  margin-right: 20px;
+}
+.btn-detail{
+  margin-right: 10px;
+}
